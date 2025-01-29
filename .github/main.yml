@@ -1,0 +1,32 @@
+name: API Key Check
+
+#
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-api-keys:
+    runs-on: ubuntu-latest  # İşlem Ubuntu üzerinde çalışacak.
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2  # GitHub reposundan kodu alır.
+
+    - name: Set up Python
+      uses: actions/setup-python@v2  # Python ortamını kurar.
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Gerekli Python kütüphanelerini yükler.
+
+    - name: Run the script
+      env:
+        ABUSEIPDB_API_KEY: ${{ secrets.ABUSEIPDB_API_KEY }}
+        SHODAN_API_KEY: ${{ secrets.SHODAN_API_KEY }}
+        GOOGLE_SAFE_BROWSING_API_KEY: ${{ secrets.GOOGLE_SAFE_BROWSING_API_KEY }}
+        ONLINE_HASH_CRACK_API_KEY: ${{ secrets.ONLINE_HASH_CRACK_API_KEY }}
+      run: |
+        python script.py  # script.py dosyasını çalıştırır.
